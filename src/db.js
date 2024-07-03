@@ -2,7 +2,7 @@ import mongodb from "mongoose";
 import dotenv from 'dotenv'
 dotenv.config()
 
-const url = process.env.MONGODB_URI
+const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/todo'
 
 if (!url) {
   console.error('Error: La variable de entorno MONGODB_URI no está definida');
