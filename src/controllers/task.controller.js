@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 
-const URL = 'https://todoclient-h8ld.onrender.com/task'
+const URL = 'aqui va la url de la api'
 
 const addTask = async(task)=>{
     await fetch(URL,{
