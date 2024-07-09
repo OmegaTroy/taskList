@@ -1,13 +1,25 @@
-import Task from '../model/Task.js'
-import {mongodb} from '../db.js'
 import chalk from 'chalk'
 
+const URL = 'https://todoclient-h8ld.onrender.com/task'
+
 const addTask = async(task)=>{
-    await Task.create(task)
+    await fetch(URL,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(task)
+    })
 }
 
 const listTask = async()=>{
-  const tasks = await Task.find()
+  const data = await fetch(URL)
+  const tasks = await data.json()
+
+  if(tasks.length === 0){
+    console.log('No hay tareas pendientes')
+    process.exit(0)
+  }
   tasks.forEach((task,index)=>{
     if(task.completed){
       console.log(`${index}. ` + chalk.green.bold(`${task.completed ? '✔ ' : '❌'} ${task.name}, id: ${task._id}`))
@@ -16,21 +28,25 @@ const listTask = async()=>{
     console.log(`${index}. ` + chalk.red.bold(`${task.completed ? '✔' : '❌'} ${task.name}, id: ${task._id}`))
   })
   console.log('\n')
-  await mongodb.connection.close()
   process.exit(0)
 }
 
 const updateTask = async(_id,newTask)=>{
-  const task = await Task.findOne({_id})
-  if(newTask.name === '') {
-    await Task.updateOne({_id},{$set:{completed:!task.completed}})
-  }else{
-    await Task.updateOne({_id},newTask)
-  }
+  
+  await fetch(`${URL}/${_id}`,{
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newTask)
+  })
+
 }
 
 const removeTask = async(_id)=>{
-  await Task.deleteOne({_id})
+  await fetch(`${URL}/${_id}`,{
+    method: 'DELETE'
+  })
 }
 
 export {addTask,listTask, updateTask,removeTask}

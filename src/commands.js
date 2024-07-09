@@ -1,6 +1,6 @@
 import {createPromptModule} from 'inquirer';
 import { program } from 'commander';
-import {addTask,listTask, updateTask,removeTask} from './controllers/task.controller.js'
+import {addTask, listTask,updateTask,removeTask} from './controllers/task.controller.js'
 import chalk from 'chalk'
 
 const prompt = createPromptModule()
@@ -8,7 +8,6 @@ const prompt = createPromptModule()
 program.version('0.0.1').description('A CLI tool for managing your todo.');
 
 program.command('add').alias('a').action(async()=>{
-
    const answers = await prompt([
         {
             type: 'input',
@@ -18,7 +17,6 @@ program.command('add').alias('a').action(async()=>{
     ])
     await addTask(answers)
     console.log('\n' +chalk.magenta('') + chalk.hex('#000').bgMagenta.bold("    Todo List    ") + chalk.magenta('\n'));
-
     await listTask()
 })
 
